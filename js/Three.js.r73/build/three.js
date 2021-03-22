@@ -34806,7 +34806,7 @@ THREE.BoxHelper = function ( object ) {
 	geometry.setIndex( new THREE.BufferAttribute( indices, 1 ) );
 	geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
 
-	THREE.LineSegments.call( this, geometry, new THREE.LineBasicMaterial( { color: 0xffff00 } ) );
+	THREE.LineSegments.call( this, geometry, new THREE.LineBasicMaterial( { color: 0xff0000 } ) );
 
 	if ( object !== undefined ) {
 

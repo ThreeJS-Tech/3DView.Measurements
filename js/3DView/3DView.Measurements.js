@@ -49,6 +49,30 @@
 		
 		var boundingSphere = geometry.boundingSphere.clone();
 
+		mesh.name = "cube";
+
+		const box = new THREE.BoxHelper( mesh, 0xff0000 );
+		box.name = 'boxhelper'
+		box.visible = false;
+
+		var positions = box.geometry.attributes.position.array;
+		var p1 = new THREE.Vector3(positions[0]+positions[3], positions[1] + positions[4], positions[2]+positions[5]);
+		var p2 = new THREE.Vector3(positions[0]+positions[9], positions[1] + positions[10], positions[2]+positions[11]);
+		var p3 = new THREE.Vector3(positions[0]+positions[12], positions[1] + positions[13], positions[2]+positions[14]);
+
+		p1.divideScalar(2);
+		p2.divideScalar(2);
+		p3.divideScalar(2);
+
+		var dist1 = new THREE.Vector3(positions[0], positions[1], positions[2]).distanceTo(new THREE.Vector3(positions[3], positions[4],positions[5]));
+		var dist2 = new THREE.Vector3(positions[0], positions[1], positions[2]).distanceTo(new THREE.Vector3(positions[9], positions[10],positions[11]));
+		var dist3 = new THREE.Vector3(positions[0], positions[1], positions[2]).distanceTo(new THREE.Vector3(positions[12], positions[13],positions[14]));
+		this.createLabel(box, dist1, p1);
+		this.createLabel(box, dist2, p2);
+		this.createLabel(box, dist3, p3);
+
+		mesh.add( box );
+
 		mesh.rotateX (-Math.PI/2);
 		mesh.updateMatrixWorld();
 		scene.add( mesh );
@@ -60,6 +84,9 @@
 		
 		camera.position.set(0, 0, boundingSphere.radius * 2).add(center);
 		camera.lookAt( center );
+
+		// const axesHelper = new THREE.AxesHelper( 5 );
+		// scene.add( axesHelper );
 	}
 
 	this.addGeometry = function(geometry) {
@@ -84,6 +111,7 @@
 	this.clear = function() {
 		while (scene.children.length)
 			scene.remove(scene.children[0]);
+		
 	}
 
 	this.clearMeasurements = function() {
@@ -100,8 +128,59 @@
 		for (var key in measurements) {
 			this.removeMeasurement(measurements[key]);
 		}
+
+		this.clearObject();
 		
 	}
+
+	this.boundingBox = function() {
+		console.log("bounding box");
+		var box = scene.getObjectByName('cube').children[0];
+
+		box.visible = !box.visible;
+	}
+
+	this.clearObject = function() {
+
+		var object = scene.getObjectByName('cube');
+		if(object === undefined || object === null) return;
+		object.material.dispose();
+		object.geometry.dispose();
+		scene.remove(object);
+	}
+
+	this.createLabel = function (meshToAttach, value, position) {
+        const canvas = document.createElement("CANVAS");
+        canvas.style.position = "absolute";
+        canvas.style.zIndex = -1;
+        canvas.width = 128;
+        canvas.height = 128;
+    
+        const ctx = canvas.getContext('2d');
+        const x = 64;
+        const y = 32;
+        
+        ctx.fillStyle = "rgb(255, 0, 0)";
+        ctx.font = "bold 32px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(value.toFixed(1)+'MM', x, y);
+    
+        const numberTexture = new THREE.CanvasTexture(canvas);
+    
+        const spriteMaterial = new THREE.SpriteMaterial({
+            map: numberTexture,
+            alphaTest: 0.5,
+            depthTest: false,
+            depthWrite: false
+        });
+    
+        let sprite = new THREE.Sprite(spriteMaterial);
+        sprite.position.copy(position);
+        sprite.scale.set(2, 2, 1);
+        meshToAttach.add(sprite);
+    
+    }
 	
 	///////////////////////////private section
 	

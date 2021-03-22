@@ -77,13 +77,20 @@
 			">Point Info</button>			
 			<button onclick="
 				view.clearMeasurements();
-			">Clear</button>			
+			">Clear</button>
+			<button onclick="
+				view.boundingBox();
+			">Bounding Box</button>
+			<!-- <button onclick="
+				view.clearObject();
+			">Dispose</button>			 -->
 		</div>
 		<div id="container"></div>
 		<div id="info"></div>
 		<script src="js/Three.js.r73/examples/libs/Detector.js"></script>
 
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.min.js"></script>
+		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.min.js"></script> -->
+		<script src="js/Three.js.r73/build/three.js"></script>
 		<script src="js/Three.js.r73/examples/renderers/CanvasRenderer.js"></script>
 		<script src="js/Three.js.r73/examples/renderers/Projector.js"></script>
 		<script src="js/Three.js.r73/examples/libs/ui.js"></script>
